@@ -1,5 +1,5 @@
-import { TableRow } from '@mui/material';
-import { TableCell } from '@mui/material';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 
 function Customer(props) {
     return (

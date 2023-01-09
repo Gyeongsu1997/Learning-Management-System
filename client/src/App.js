@@ -1,69 +1,30 @@
 /* eslint-disable */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Customer from './components/Customer';
 import './App.css';
-import { Paper } from '@mui/material';
-import { Table } from '@mui/material';
-import { TableHead } from '@mui/material';
-import { TableBody } from '@mui/material';
-import { TableRow } from '@mui/material';
-import { TableCell } from '@mui/material';
-
-/*
-const customers = [
-{
-  'id': 1,
-  'image': 'https://placeimg.com/64/64/1',
-  'name': '최경수',
-  'birthday': '971111',
-  'gender': '남자',
-  'job': '대학생'
-},
-{
-  'id': 2,
-  'image': 'https://placeimg.com/64/64/2',
-  'name': '김경수',
-  'birthday': '970211',
-  'gender': '여자',
-  'job': '프로그래머'
-},
-{
-  'id': 3,
-  'image': 'https://placeimg.com/64/64/3',
-  'name': '정범수',
-  'birthday': '921131',
-  'gender': '남자',
-  'job': '디자이너'
-}
-]*/
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function App() {
-  let [customers, 변경] = useState([
-    {
-      'id': 1,
-      'image': 'https://placeimg.com/64/64/1',
-      'name': '최경수',
-      'birthday': '971111',
-      'gender': '남자',
-      'job': '대학생'
-    },
-    {
-      'id': 2,
-      'image': 'https://placeimg.com/64/64/2',
-      'name': '김경수',
-      'birthday': '970211',
-      'gender': '여자',
-      'job': '프로그래머'
-    },
-    {
-      'id': 3,
-      'image': 'https://placeimg.com/64/64/3',
-      'name': '정범수',
-      'birthday': '921131',
-      'gender': '남자',
-      'job': '디자이너'
-    }
-    ]);
+  const [customers, setCustomers] = useState("");
+
+  useEffect(() => {
+    callApi()
+      .then(res => setCustomers(res))
+      .catch(err => console.log(err));
+  }, [customers]);
+
+  const callApi = async () => {
+    const response = await fetch('/api/customers');
+    const body = await response.json();
+    return body;
+  };
+
   return (
     <Paper>
       <Table>
@@ -78,7 +39,15 @@ function App() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {customers.map(c => { return ( <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />); })}
+          {customers ? customers.map(c => { 
+            return ( <Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />); 
+          }) :
+          <TableRow>
+            <TableCell colSpan="6" align="center"> 
+              <CircularProgress />    
+            </TableCell>
+          </TableRow>
+          }
         </TableBody>
       </Table>
     </Paper>
